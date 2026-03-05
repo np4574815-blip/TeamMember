@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Company AI Dashboard</title>
+
+<style>
+
+body{
+font-family: Arial;
+background: #0f172a;
+color: white;
+text-align:center;
+padding:40px;
+}
+
+h1{
+color:#38bdf8;
+}
+
+.container{
+background:#1e293b;
+padding:30px;
+border-radius:10px;
+width:400px;
+margin:auto;
+box-shadow:0px 0px 20px #000;
+}
+
+input,select{
+width:90%;
+padding:10px;
+margin:10px;
+border:none;
+border-radius:5px;
+}
+
+button{
+padding:10px 20px;
+margin:5px;
+border:none;
+border-radius:5px;
+background:#38bdf8;
+color:black;
+font-weight:bold;
+cursor:pointer;
+}
+
+button:hover{
+background:#0ea5e9;
+}
+
+#output{
+margin-top:20px;
+background:#020617;
+padding:15px;
+border-radius:5px;
+min-height:80px;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>🤖 COMPANY AI ASSISTANT</h1>
+
+<div class="container">
+
+<input id="name" placeholder="Enter employee name">
+
+<select id="sector">
+<option value="">Select Sector</option>
+<option>Tech Sector</option>
+<option>Management Team</option>
+<option>Developer Team</option>
+</select>
+
+<br>
+
+<button onclick="registerEmployee()">Register</button>
+<button onclick="askAI()">Ask AI</button>
+<button onclick="showAll()">Show All</button>
+
+<div id="output"></div>
+
+</div>
+
+
+<script>
+
+let memory = JSON.parse(localStorage.getItem("companyAI")) || [];
+
+function saveMemory(){
+localStorage.setItem("companyAI",JSON.stringify(memory));
+}
+
+function registerEmployee(){
+
+let name=document.getElementById("name").value;
+let sector=document.getElementById("sector").value;
+
+if(name=="" || sector==""){
+document.getElementById("output").innerHTML="Enter name and sector.";
+return;
+}
+
+memory.push({name:name,sector:sector});
+
+saveMemory();
+
+document.getElementById("output").innerHTML=
+"AI: "+name+" registered in "+sector;
+
+document.getElementById("name").value="";
+}
+
+function askAI(){
+
+let name=document.getElementById("name").value;
+
+for(let i=0;i<memory.length;i++){
+
+if(memory[i].name.toLowerCase()==name.toLowerCase()){
+
+document.getElementById("output").innerHTML=
+"AI: "+memory[i].name+" works in "+memory[i].sector;
+
+return;
+
+}
+
+}
+
+document.getElementById("output").innerHTML=
+"AI: Employee not found in memory.";
+
+}
+
+function showAll(){
+
+let text="";
+
+for(let i=0;i<memory.length;i++){
+
+text+=memory[i].name+" - "+memory[i].sector+"<br>";
+
+}
+
+if(text=="") text="No employees registered.";
+
+document.getElementById("output").innerHTML=text;
+
+}
+
+</script>
+
+</body>
+</html>
